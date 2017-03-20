@@ -53,7 +53,7 @@ class MainPage {
 	_addStartButton(){
 		this._startButton = new StartButton(this._app);
 		this._app.stage.addChild(this._startButton);
-		this._startButton.on('click', this._pageControl.startPage());
+		this._startButton.on('click', this._pageControl.startPage);
 	}
 }
 
@@ -74,7 +74,6 @@ class MainPage {
 			this.x = this._app.renderer.width / 2;
 			this.y = this._app.renderer.height / 2;
 			// this.on('pointerdown', alert("2"));
-
 		}
 	}
 
