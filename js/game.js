@@ -7,7 +7,9 @@ window.onload = function() {
 
 class Main {
   constructor(gameConteiner) {
-   	this._app = new PIXI.Application(606, 707);
+  	let appWidth = 600;
+  	let appHeight = Math.floor(appWidth / 6 * 7);
+   	this._app = new PIXI.Application(appWidth, appHeight);
   	gameConteiner.appendChild(this._app.view);
   	this._pageControl = new PageControl(this._app);
   	this._pageControl.mainPage();	
@@ -17,7 +19,7 @@ class Main {
 class StarControl extends PIXI.Container {
 	constructor(app) {
 		super();
-		this.border = 3;
+		this.border = 0;
 		this._numCols = 12;
 		this._numRows = 10;
 		this._starsArray = [];
@@ -44,20 +46,28 @@ class StarControl extends PIXI.Container {
 	}
 
 	_initStar(i) {;
-		let x = Math.floor(i % this._numCols) * this._starWidth;
-		let y = Math.floor(i / this._numCols) * this._starWidth;
+		let x = Math.floor(i % this._numCols) * this._starWidth + this.border;
+		let y = Math.floor(i / this._numCols) * this._starWidth + this.border;
 		y += this._shift_down;
-		this._starsArray[i] = new Star(x, y, this._starWidth);
+		this._starsArray[i] = new Star(x, y, this._starWidth, i);
+		this._starsArray[i].on('click', this._starClick.bind(this, i));
 		this.addChild(this._starsArray[i]);
+	}
+	_starClick(i) {
+		alert(i);
 	}
 }
 
 class Star extends PIXI.Sprite {
-	constructor(x, y, width) {
+	constructor(x, y, width, i) {
 		super();
+		this._i = i;
 		this._init(x, y, width);
 	}
 	_init(x, y, width) {
+		this.interactive = true;
+		this.buttonMode = true;
+
 		this.width = width;
 		this.height = width;
 		this.randomColor();
