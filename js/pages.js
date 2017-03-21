@@ -50,6 +50,8 @@ class StartPage extends BasePage {
 	constructor(app, pageControl) {
 		super(app, pageControl);
 		this._setBackground('./img/bg_startpage.png');
+		this._starControl = new StarControl(this._app);
+		this._app.stage.addChild(this._starControl);
 	}
 }
 
