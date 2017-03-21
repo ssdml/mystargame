@@ -34,8 +34,9 @@ class StarControl extends PIXI.Container {
 		this._initStars();
 	}
 	_initStars() {
+		this._starWidth = this._app.screen.width / this._wF;
 		for (let i = 0; i < this._wF * this._hF; i++){
-			this._starsArray[i] = new Star(i);
+			this._starsArray[i] = new Star(i, this._starWidth);
 			this.addChild(this._starsArray[i]);
 		}
 		
@@ -43,14 +44,15 @@ class StarControl extends PIXI.Container {
 }
 
 class Star extends PIXI.Sprite {
-	constructor(i) {
+	constructor(i, width) {
 		super();
-		this._init(i);
+		this._init(i, width);
 	}
-	_init(i) {
+	_init(i, width) {
+		this.width = width;
+		this.height = width;
 		this.texture = PIXI.Texture.fromImage('./img/star_1.png');
 		this.anchor.set(0);
-		console.log(1);
-		this.x = i * this.texture.height;
+		this.x = i * width;
 	}
 }
