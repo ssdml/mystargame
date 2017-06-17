@@ -53,7 +53,7 @@ class StarControl extends PIXI.Container {
 		let x = Math.floor(i % this._numCols) * this._starWidth + this.border;
 		let y = Math.floor(i / this._numCols) * this._starWidth + this.border;
 		y += this._shift_down;
-		this._starsArray[i] = new Star(x, y, this._starWidth, i);
+		this._starsArray[i] = new Star(x, y, this._starWidth);
 		this._starsArray[i].on('click', this._starClick.bind(this, i));
 		this.addChild(this._starsArray[i]);
 	}
@@ -92,14 +92,14 @@ class StarControl extends PIXI.Container {
 
 	_dropDown() {
 		for (let i = 0; i < this._starsArray.length; i++) {
-			if (this._starsArray[i].getColor() == 0) continue;
+			if (!this._starsArray[i].getColor()) continue;
 			let next_i = i + this._numCols;
-			if (next_i in this._starsArray && this._starsArray[next_i].getColor() == 0) {
-				let tmp = this._starsArray[i];
-				this._starsArray[next_i] = tmp;
-				console.log(next_i, this._starsArray[next_i].getColor());
-				this._starsArray[next_i].down();
-			}
+			// if (next_i in this._starsArray && !this._starsArray[next_i].getColor()) {
+			// 	let tmp = this._starsArray[i];
+			// 	this._starsArray[next_i] = tmp;
+			// 	// console.log(next_i, this._starsArray[next_i].getColor());
+			// 	this._starsArray[next_i].down();
+			// }
 		}
 	}
 
@@ -109,6 +109,7 @@ class StarControl extends PIXI.Container {
 
 	_deselectAll() {
 		for (let i = 0; i < this._starsArray.length; i++) {
+			if (!this._starsArray[i].getColor()) continue;
 			let clr = this._starsArray[i].getColor();
 			if (clr > 100) {
 				this._starsArray[i].color(clr - 100);
@@ -160,9 +161,8 @@ class StarControl extends PIXI.Container {
 }
 
 class Star extends PIXI.Sprite {
-	constructor(x, y, width, i) {
+	constructor(x, y, width) {
 		super();
-		this._i = i;
 		this._init(x, y, width);
 	}
 	_init(x, y, width) {
@@ -175,6 +175,7 @@ class Star extends PIXI.Sprite {
 		this.anchor.set(0);
 		this.x = x;
 		this.y = y;
+		this.is_destroyed = false;
 	}
 
 	randomColor() {
@@ -187,8 +188,8 @@ class Star extends PIXI.Sprite {
 	}
 
 	remove() {
-		this.texture = PIXI.Texture.fromImage('./img/diable.png');
 		this._color = 0;
+		this.destroy();
 	}
 
 	down() {
